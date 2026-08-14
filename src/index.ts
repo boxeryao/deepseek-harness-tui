@@ -34,11 +34,14 @@ export interface Config {
   toolDetailMaxLines: number
   /** Maximum characters retained for one expanded tool detail. */
   toolDetailMaxCharacters: number
+  /** Maximum completed or active calls retained for `/tool N`. */
+  toolDetailHistoryLimit: number
 }
 
 export const Config: z<Config> = z.object({
   toolDetailMaxLines: z.number().min(1).default(80),
   toolDetailMaxCharacters: z.number().min(100).default(8_000),
+  toolDetailHistoryLimit: z.number().min(1).default(200),
 })
 
 /** Process-facing terminal IO; tests may replace these streams. */
@@ -223,7 +226,7 @@ export interface ToolRenderer {
  */
 export function createToolRenderer(
   resolveTool?: (name: string) => ToolDefinition | undefined,
-  limits: Config = { toolDetailMaxLines: 80, toolDetailMaxCharacters: 8_000 },
+  limits: Config = { toolDetailMaxLines: 80, toolDetailMaxCharacters: 8_000, toolDetailHistoryLimit: 200 },
 ): ToolRenderer {
   const calls = new Map<string, { label: number; name: string; time: number; args: unknown; view?: ToolCallView }>()
   const details = new Map<number, string>()
@@ -232,6 +235,15 @@ export function createToolRenderer(
 
   const indent = (value: string): string => value.split('\n').map(line => `    ${line}`).join('\n')
   const formatValue = (value: unknown): string => typeof value === 'string' ? value : JSON.stringify(value, undefined, 2)
+  const retainDetail = (label: number, value: string): void => {
+    details.delete(label)
+    details.set(label, value)
+    while (details.size > limits.toolDetailHistoryLimit) {
+      const oldest = details.keys().next().value as number | undefined
+      if (oldest === undefined) break
+      details.delete(oldest)
+    }
+  }
   const truncate = (value: string): string => {
     const lines = value.split('\n')
     const lineLimited = lines.slice(0, limits.toolDetailMaxLines).join('\n')
@@ -295,7 +307,7 @@ export function createToolRenderer(
         calls.set(event.data.callId, call)
         const title = view?.title ?? call.name
         const detail = callDetail(view, args)
-        details.set(call.label, `Input\n${truncate(detail)}`)
+        retainDetail(call.label, `Input\n${truncate(detail)}`)
         internals.output.write(`\n[${String(call.label)}] ${title}…${verbose && detail !== '' ? `\n${indent(truncate(detail))}` : ''}\n`)
         return
       }
@@ -316,9 +328,9 @@ export function createToolRenderer(
         const detail = resultDetail(view, event)
         const status = event.data.error === undefined ? `completed${elapsed}` : `failed: ${event.data.error.code}${elapsed}`
         const summary = resultSummary(view)
-        if (call !== undefined) {
+        if (call !== undefined && details.has(call.label)) {
           const retained = details.get(call.label) ?? 'Input'
-          details.set(call.label, `${retained}\n\nResult\n${truncate(detail)}`)
+          retainDetail(call.label, `${retained}\n\nResult\n${truncate(detail)}`)
         }
         const showDetail = verbose || event.data.error !== undefined
         internals.output.write(`${prefix} ${status}${summary === '' ? '' : ` — ${summary}`}${showDetail && detail !== '' ? `\n${indent(truncate(detail))}` : ''}\n`)

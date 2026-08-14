@@ -41,7 +41,7 @@ dsh --profile tui
 - `/tool N` 显示编号为 `N` 的调用所保留的输入和结果。
 - `/help` 显示命令；`/exit` 或 `/quit` 关闭会话。
 
-工具调用默认显示带编号的摘要，失败调用自动展开。`toolDetailMaxLines` 和 `toolDetailMaxCharacters` 默认限制为 80 行和 8,000 字符。完整工具值仍保留在 Harness Session 日志中。
+工具调用默认显示带编号的摘要，失败调用自动展开。`toolDetailMaxLines` 和 `toolDetailMaxCharacters` 默认限制为 80 行和 8,000 字符。`toolDetailHistoryLimit` 默认让 `/tool N` 保留最近 200 次调用；更早的详情会从进程内存淘汰，完整值仍保留在 DSH Session 日志中。
 
 ## 范围
 

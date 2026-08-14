@@ -114,7 +114,7 @@ describe('tool renderer', () => {
   it('toggles bounded details and expands failed results automatically', () => {
     let output = ''
     internals.output = { write: (chunk: string) => { output += chunk; return true } } as typeof process.stdout
-    const render = createToolRenderer(undefined, { toolDetailMaxLines: 2, toolDetailMaxCharacters: 100 })
+    const render = createToolRenderer(undefined, { toolDetailMaxLines: 2, toolDetailMaxCharacters: 100, toolDetailHistoryLimit: 200 })
     expect(render.toggleVerbose()).toBe(true)
     const callId = CallId('read-1')
 
@@ -126,6 +126,24 @@ describe('tool renderer', () => {
 
     expect(output).toContain('    {\n      "path": "README.md"\n    … 1 lines omitted')
     expect(output).toContain('[1] read failed: READ_FAILED (1.0s)\n    one\n    two\n    … 1 lines omitted')
+  })
+
+  it('retains only the configured number of tool details', () => {
+    internals.output = { write: () => true } as typeof process.stdout
+    const render = createToolRenderer(undefined, {
+      toolDetailMaxLines: 80, toolDetailMaxCharacters: 8_000, toolDetailHistoryLimit: 2,
+    })
+
+    for (const [index, value] of ['first', 'second', 'third'].entries()) {
+      render({
+        type: 'tool/call', seq: index, time: index,
+        data: { turn: 1, step: 1, callId: CallId(value), name: 'read', arguments: `{"value":"${value}"}` },
+      })
+    }
+
+    expect(render.detail(1)).toBeUndefined()
+    expect(render.detail(2)).toContain('second')
+    expect(render.detail(3)).toContain('third')
   })
 })
 

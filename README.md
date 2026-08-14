@@ -41,7 +41,7 @@ The package consumes published `@deepseek-ai/*` packages at `0.1.0-rc.6`; it has
 - `/tool N` prints the retained input and result for call number `N`.
 - `/help` lists commands; `/exit` or `/quit` closes the session.
 
-Tool calls show numbered summaries by default and failed calls expand automatically. `toolDetailMaxLines` and `toolDetailMaxCharacters` default to 80 lines and 8,000 characters. Complete tool values remain in the Harness Session log.
+Tool calls show numbered summaries by default and failed calls expand automatically. `toolDetailMaxLines` and `toolDetailMaxCharacters` default to 80 lines and 8,000 characters. `toolDetailHistoryLimit` keeps the latest 200 calls available to `/tool N`; older details leave process memory while complete values remain in the DSH Session log.
 
 ## Scope
 
