@@ -4,6 +4,8 @@ English | [中文](README.zh.md)
 
 A lightweight and fast terminal UI plugin for [DeepSeek Harness (DSH)](https://github.com/deepseek-ai/deepseek-harness). It connects directly to DSH's agent, tool, permission, and Session services instead of recreating the Harness runtime.
 
+**DSH-TUI** is playfully nicknamed **“单身汉 TUI”** in Chinese, based on the sound of the DSH initials.
+
 ![DeepSeek Harness TUI](assets/tui-windows.png)
 
 ## Why this plugin
@@ -16,8 +18,8 @@ A lightweight and fast terminal UI plugin for [DeepSeek Harness (DSH)](https://g
 
 - Node.js 22.19 or later, or Node.js 24+
 - pnpm 11+
-- DeepSeek Harness `0.1.0-rc.6`
-- `DEEPSEEK_API_KEY` in the process that launches `dsh`
+- An existing DeepSeek Harness `0.1.0-rc.6` installation
+- A model credential already configured in DSH, either through its credentials service or the launching environment
 
 ## Develop from this checkout
 

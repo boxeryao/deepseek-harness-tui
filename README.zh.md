@@ -4,6 +4,8 @@
 
 [DeepSeek Harness（DSH）](https://github.com/deepseek-ai/deepseek-harness) 的轻量、快捷终端 UI 插件。它直接衔接 DSH 的 Agent、工具、权限和 Session 服务，不重复实现 Harness 运行时。
 
+项目简称 **DSH-TUI**，中文昵称为 **“单身汉 TUI”**，取自 DSH 的谐音。
+
 ![DeepSeek Harness TUI](assets/tui-windows.png)
 
 ## 插件特点
@@ -16,8 +18,8 @@
 
 - Node.js 22.19 或更高版本，或者 Node.js 24+
 - pnpm 11+
-- DeepSeek Harness `0.1.0-rc.6`
-- 启动 `dsh` 的进程中已设置 `DEEPSEEK_API_KEY`
+- 已安装 DeepSeek Harness `0.1.0-rc.6`
+- DSH 中已有可用的模型凭据，可由凭据服务保存，也可通过启动环境提供
 
 ## 从本目录开发和安装
 

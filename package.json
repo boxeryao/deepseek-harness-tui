@@ -1,6 +1,6 @@
 {
   "name": "deepseek-harness-tui",
-  "description": "A lightweight and fast TUI plugin connected directly to the DSH runtime",
+  "description": "DSH-TUI: a lightweight and fast terminal plugin connected directly to the DSH runtime",
   "version": "0.1.1",
   "type": "module",
   "main": "lib/index.js",
@@ -41,6 +41,7 @@
   },
   "license": "MIT",
   "keywords": [
+    "dsh-tui",
     "dsh-plugin",
     "deepseek-harness",
     "deepseek",
