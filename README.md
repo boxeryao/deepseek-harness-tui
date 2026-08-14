@@ -1,27 +1,27 @@
-# DeepSeek Harness TUI — DSH Plugin
+# DeepSeek Harness TUI — DSH 插件
 
-English | [中文](README.zh.md)
+[English](README.en.md) | 中文
 
-A lightweight and fast terminal UI plugin for [DeepSeek Harness (DSH)](https://github.com/deepseek-ai/deepseek-harness). It connects directly to DSH's agent, tool, permission, and Session services instead of recreating the Harness runtime.
+[DeepSeek Harness（DSH）](https://github.com/deepseek-ai/deepseek-harness) 的轻量、快捷终端 UI 插件。它直接衔接 DSH 的 Agent、工具、权限和 Session 服务，不重复实现 Harness 运行时。
 
-**DSH-TUI** is playfully nicknamed **“单身汉 TUI”** in Chinese, based on the sound of the DSH initials.
+项目简称 **DSH-TUI**，中文昵称为 **“单身汉 TUI”**，取自 DSH 的谐音。
 
 ![DeepSeek Harness TUI](assets/tui-windows.png)
 
-## Why this plugin
+## 插件特点
 
-- **Lightweight** — one focused terminal presentation layer with no Web application runtime.
-- **Fast workflow** — responsive multi-line input, direct keyboard controls, and compact tool summaries.
-- **Native DSH integration** — uses DSH's scoped tools, approvals, agent lifecycle, and durable Session log directly.
+- **轻量** — 专注于终端展示层，不携带 Web 应用运行时。
+- **快捷** — 多行输入响应迅速，键盘控制直接，工具活动以简洁摘要呈现。
+- **原生衔接 DSH** — 直接使用 DSH 的 scoped 工具、审批、Agent 生命周期和持久化 Session 日志。
 
-## Requirements
+## 环境要求
 
-- Node.js 22.19 or later, or Node.js 24+
+- Node.js 22.19 或更高版本，或者 Node.js 24+
 - pnpm 11+
-- An existing DeepSeek Harness `0.1.0-rc.6` installation
-- A model credential already configured in DSH, either through its credentials service or the launching environment
+- 已安装 DeepSeek Harness `0.1.0-rc.6`
+- DSH 中已有可用的模型凭据，可由凭据服务保存，也可通过启动环境提供
 
-## Develop from this checkout
+## 从本目录开发和安装
 
 ```powershell
 pnpm install
@@ -31,24 +31,24 @@ dsh plugin --profile tui add .
 dsh --profile tui
 ```
 
-The package consumes published `@deepseek-ai/*` packages at `0.1.0-rc.6`; it has no monorepo-relative or `workspace:^` dependency.
+本包使用 npm 已发布的 `0.1.0-rc.6` 版 `@deepseek-ai/*` 包，不包含 monorepo 相对路径或 `workspace:^` 依赖。
 
-## Input and commands
+## 输入与命令
 
-- Enter sends the current message.
-- Shift+Enter or Ctrl+J inserts a newline.
-- Ctrl+V accepts bracketed multi-line paste; `/paste` reads the Windows clipboard directly.
-- `/cancel` or Ctrl+C cancels the active task.
-- `/verbose` toggles bounded tool details for subsequent calls.
-- `/tool N` prints the retained input and result for call number `N`.
-- `/help` lists commands; `/exit` or `/quit` closes the session.
+- Enter 发送当前消息。
+- Shift+Enter 或 Ctrl+J 插入换行。
+- Ctrl+V 接收 bracketed 多行粘贴；`/paste` 直接读取 Windows 剪贴板。
+- `/cancel` 或 Ctrl+C 取消当前任务。
+- `/verbose` 切换后续调用的限长工具详情。
+- `/tool N` 显示编号为 `N` 的调用所保留的输入和结果。
+- `/help` 显示命令；`/exit` 或 `/quit` 关闭会话。
 
-Tool calls show numbered summaries by default and failed calls expand automatically. `toolDetailMaxLines` and `toolDetailMaxCharacters` default to 80 lines and 8,000 characters. `toolDetailHistoryLimit` keeps the latest 200 calls available to `/tool N`; older details leave process memory while complete values remain in the DSH Session log.
+工具调用默认显示带编号的摘要，失败调用自动展开。`toolDetailMaxLines` 和 `toolDetailMaxCharacters` 默认限制为 80 行和 8,000 字符。`toolDetailHistoryLimit` 默认让 `/tool N` 保留最近 200 次调用；更早的详情会从进程内存淘汰，完整值仍保留在 DSH Session 日志中。
 
-## Scope
+## 范围
 
-This repository owns only the terminal presentation plugin. DSH owns model routing, tools, permissions, persistence, and agent execution. The TUI is line-oriented and does not provide the Web client's graphical cards, session navigation, or full-screen scrollback.
+本仓库只负责终端展示插件。模型路由、工具、权限、持久化和 Agent 执行由 DSH 提供。TUI 采用行式界面，不提供 Web 客户端的图形卡片、会话导航或全屏滚动区。
 
-## License
+## 许可证
 
 [MIT](LICENSE)
