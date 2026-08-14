@@ -1,0 +1,17 @@
+.env
+.env.*
+!.env.example
+node_modules/
+lib/
+dist/
+coverage/
+*.tsbuildinfo
+*.log
+.cache/
+.pnpm-store/
+.sessions/
+.storages/
+.vscode/
+.idea/
+.DS_Store
+.artifacts/
