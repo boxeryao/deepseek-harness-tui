@@ -1,10 +1,16 @@
-# DeepSeek Harness TUI
+# DeepSeek Harness TUI — DSH Plugin
 
 English | [中文](README.zh.md)
 
-An independent terminal UI plugin for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness). It provides multi-line editing and bracketed paste through `pi-tui`, compact tool activity, interactive approvals, and persisted Harness sessions.
+A lightweight and fast terminal UI plugin for [DeepSeek Harness (DSH)](https://github.com/deepseek-ai/deepseek-harness). It connects directly to DSH's agent, tool, permission, and Session services instead of recreating the Harness runtime.
 
 ![DeepSeek Harness TUI](assets/tui-windows.png)
+
+## Why this plugin
+
+- **Lightweight** — one focused terminal presentation layer with no Web application runtime.
+- **Fast workflow** — responsive multi-line input, direct keyboard controls, and compact tool summaries.
+- **Native DSH integration** — uses DSH's scoped tools, approvals, agent lifecycle, and durable Session log directly.
 
 ## Requirements
 
@@ -39,9 +45,8 @@ Tool calls show numbered summaries by default and failed calls expand automatica
 
 ## Scope
 
-This repository owns only the terminal presentation plugin. DeepSeek Harness owns model routing, tools, permissions, persistence, and agent execution. The TUI is line-oriented and does not provide the Web client's graphical cards, session navigation, or full-screen scrollback.
+This repository owns only the terminal presentation plugin. DSH owns model routing, tools, permissions, persistence, and agent execution. The TUI is line-oriented and does not provide the Web client's graphical cards, session navigation, or full-screen scrollback.
 
 ## License
 
 [MIT](LICENSE)
-

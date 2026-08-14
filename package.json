@@ -1,6 +1,6 @@
 {
   "name": "deepseek-harness-tui",
-  "description": "A compact interactive terminal UI plugin for DeepSeek Harness",
+  "description": "A lightweight and fast TUI plugin connected directly to the DSH runtime",
   "version": "0.1.0",
   "type": "module",
   "main": "lib/index.js",
@@ -40,6 +40,14 @@
     "node": "^22.19.0 || >=24"
   },
   "license": "MIT",
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "deepseek",
+    "tui",
+    "terminal-ui",
+    "ai-agent"
+  ],
   "publishConfig": {
     "access": "public"
   },

@@ -1,10 +1,16 @@
-# DeepSeek Harness TUI
+# DeepSeek Harness TUI — DSH 插件
 
 [English](README.md) | 中文
 
-[DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 的独立终端 UI 插件。它通过 `pi-tui` 提供多行编辑与 bracketed paste，并支持简洁的工具活动、交互式审批和 Harness 持久化会话。
+[DeepSeek Harness（DSH）](https://github.com/deepseek-ai/deepseek-harness) 的轻量、快捷终端 UI 插件。它直接衔接 DSH 的 Agent、工具、权限和 Session 服务，不重复实现 Harness 运行时。
 
 ![DeepSeek Harness TUI](assets/tui-windows.png)
+
+## 插件特点
+
+- **轻量** — 专注于终端展示层，不携带 Web 应用运行时。
+- **快捷** — 多行输入响应迅速，键盘控制直接，工具活动以简洁摘要呈现。
+- **原生衔接 DSH** — 直接使用 DSH 的 scoped 工具、审批、Agent 生命周期和持久化 Session 日志。
 
 ## 环境要求
 
@@ -39,9 +45,8 @@ dsh --profile tui
 
 ## 范围
 
-本仓库只负责终端展示插件。模型路由、工具、权限、持久化和 Agent 执行由 DeepSeek Harness 提供。TUI 采用行式界面，不提供 Web 客户端的图形卡片、会话导航或全屏滚动区。
+本仓库只负责终端展示插件。模型路由、工具、权限、持久化和 Agent 执行由 DSH 提供。TUI 采用行式界面，不提供 Web 客户端的图形卡片、会话导航或全屏滚动区。
 
 ## 许可证
 
 [MIT](LICENSE)
-
