@@ -31,17 +31,9 @@ This is a deliberate tradeoff: **the interface is Mini; the capability is not.**
 
 ## Quick install
 
-Install the latest DSH Mini TUI package from npm into the DSH `tui` profile:
+> The unscoped `deepseek-harness-tui` package on npm belongs to a different project. Do not use that package name to install this project.
 
-```powershell
-dsh plugin --profile tui add deepseek-harness-tui@latest
-```
-
-Then launch it:
-
-```powershell
-dsh --profile tui
-```
+The official scoped npm package for DSH Mini TUI is being prepared. Until it is published, use the source-checkout installation below.
 
 ## Requirements
 
@@ -60,7 +52,7 @@ dsh plugin --profile tui add .
 dsh --profile tui
 ```
 
-The `dsh plugin --profile tui add .` command installs the current source checkout; regular users should prefer the npm quick-install command above. The package consumes published `@deepseek-ai/*` packages at `0.1.0-rc.6`; it has no monorepo-relative or `workspace:^` dependency.
+The `dsh plugin --profile tui add .` command installs the current source checkout. The package consumes published `@deepseek-ai/*` packages at `0.1.0-rc.6`; it has no monorepo-relative or `workspace:^` dependency.
 
 ## Input and commands
 

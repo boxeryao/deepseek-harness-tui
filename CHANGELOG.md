@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Documented the one-line npm installation command for the DSH `tui` profile.
+- Reserved quick-install documentation for the forthcoming scoped npm package; the matching unscoped name is owned by another project.
 - Introduced **DSH Mini TUI** as the interface name while keeping the `deepseek-harness-tui` package and repository identity stable.
 - Redesigned the startup screen with a true-color `DEEPSEEK` gradient, compact model and workspace context, and a direct `/help` hint.
 - Added a restrained deep-sea palette with consistent status styling and deterministic colors for file and directory references.

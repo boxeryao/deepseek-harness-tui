@@ -31,17 +31,9 @@
 
 ## 快速安装
 
-从 npm 将最新版 DSH Mini TUI 安装到 DSH 的 `tui` profile：
+> npm 上未加作用域的 `deepseek-harness-tui` 属于另一个项目，请勿使用该包名安装本项目。
 
-```powershell
-dsh plugin --profile tui add deepseek-harness-tui@latest
-```
-
-安装完成后启动：
-
-```powershell
-dsh --profile tui
-```
+DSH Mini TUI 的正式 npm 包正在准备中。在作用域包发布前，请使用下方的本地源码安装方式。
 
 ## 环境要求
 
@@ -60,7 +52,7 @@ dsh plugin --profile tui add .
 dsh --profile tui
 ```
 
-这里的 `dsh plugin --profile tui add .` 用于安装当前源码目录；普通用户应优先使用上面的 npm 快速安装命令。本包使用 npm 已发布的 `0.1.0-rc.6` 版 `@deepseek-ai/*` 包，不包含 monorepo 相对路径或 `workspace:^` 依赖。
+这里的 `dsh plugin --profile tui add .` 用于安装当前源码目录。本包使用 npm 已发布的 `0.1.0-rc.6` 版 `@deepseek-ai/*` 包，不包含 monorepo 相对路径或 `workspace:^` 依赖。
 
 ## 输入与命令
 
