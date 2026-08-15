@@ -29,6 +29,20 @@
 - **深海视觉** — 启动仪表盘、状态标签、路径引用和思考状态使用统一的低反差深海色系。
 - **原生衔接 DSH** — 直接使用 DSH 的 scoped 工具、审批、Agent 生命周期和持久化 Session 日志。
 
+## 快速安装
+
+从 npm 将最新版 DSH Mini TUI 安装到 DSH 的 `tui` profile：
+
+```powershell
+dsh plugin --profile tui add deepseek-harness-tui@latest
+```
+
+安装完成后启动：
+
+```powershell
+dsh --profile tui
+```
+
 ## 环境要求
 
 - Node.js 22.19 或更高版本，或者 Node.js 24+
@@ -36,7 +50,7 @@
 - 已安装 DeepSeek Harness `0.1.0-rc.6`
 - DSH 中已有可用的模型凭据，可由凭据服务保存，也可通过启动环境提供
 
-## 从本目录开发和安装
+## 从本目录开发
 
 ```powershell
 pnpm install
@@ -46,7 +60,7 @@ dsh plugin --profile tui add .
 dsh --profile tui
 ```
 
-本包使用 npm 已发布的 `0.1.0-rc.6` 版 `@deepseek-ai/*` 包，不包含 monorepo 相对路径或 `workspace:^` 依赖。
+这里的 `dsh plugin --profile tui add .` 用于安装当前源码目录；普通用户应优先使用上面的 npm 快速安装命令。本包使用 npm 已发布的 `0.1.0-rc.6` 版 `@deepseek-ai/*` 包，不包含 monorepo 相对路径或 `workspace:^` 依赖。
 
 ## 输入与命令
 

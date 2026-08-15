@@ -29,6 +29,20 @@ This is a deliberate tradeoff: **the interface is Mini; the capability is not.**
 - **Deep-sea visual language** — the startup dashboard, status labels, path references, and thinking state share one restrained ocean palette.
 - **Native DSH integration** — uses DSH's scoped tools, approvals, agent lifecycle, and durable Session log directly.
 
+## Quick install
+
+Install the latest DSH Mini TUI package from npm into the DSH `tui` profile:
+
+```powershell
+dsh plugin --profile tui add deepseek-harness-tui@latest
+```
+
+Then launch it:
+
+```powershell
+dsh --profile tui
+```
+
 ## Requirements
 
 - Node.js 22.19 or later, or Node.js 24+
@@ -46,7 +60,7 @@ dsh plugin --profile tui add .
 dsh --profile tui
 ```
 
-The package consumes published `@deepseek-ai/*` packages at `0.1.0-rc.6`; it has no monorepo-relative or `workspace:^` dependency.
+The `dsh plugin --profile tui add .` command installs the current source checkout; regular users should prefer the npm quick-install command above. The package consumes published `@deepseek-ai/*` packages at `0.1.0-rc.6`; it has no monorepo-relative or `workspace:^` dependency.
 
 ## Input and commands
 
