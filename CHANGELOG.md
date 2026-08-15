@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Introduced **DSH Mini TUI** as the interface name while keeping the `deepseek-harness-tui` package and repository identity stable.
 - Redesigned the startup screen with a true-color `DEEPSEEK` gradient, compact model and workspace context, and a direct `/help` hint.
 - Added a restrained deep-sea palette with consistent status styling and deterministic colors for file and directory references.
 - Clarified the answer-first interface: routine tool activity stays out of the conversation without removing tools, failure visibility, retained details, or durable Session logs.

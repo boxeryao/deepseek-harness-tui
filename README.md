@@ -1,14 +1,14 @@
-# DeepSeek Harness TUI — DSH 插件
+# DSH Mini TUI — DeepSeek Harness 极简终端插件
 
 [English](README.en.md) | 中文
 
 [DeepSeek Harness（DSH）](https://github.com/deepseek-ai/deepseek-harness) 的极简终端 UI 插件。它保留完整的 Agent 与工具能力，但默认把执行过程收进后台，让终端专注于你的输入和模型的最终回答。
 
-项目简称 **DSH-TUI**，中文昵称为 **“单身汉 TUI”**，取自 DSH 的谐音。
+界面名称为 **DSH Mini TUI**：`Mini` 指更少的界面噪声，而不是更少的 Harness 能力。项目包名继续使用 `deepseek-harness-tui`，因此现有安装命令、仓库链接和 DSH profile 无需改变。中文也可以继续昵称为 **“单身汉 Mini TUI”**，取自 DSH 的谐音。
 
 ![新版 DeepSeek Harness TUI 启动界面](assets/tui-startup-dashboard.png)
 
-## 极简界面：少显示，专注回答
+## Mini 的含义：少显示，专注回答
 
 这版界面的设计原则很简单：**工具照常工作，过程不必占满屏幕。** 对终端用户来说，更少的状态信息意味着更清晰的上下文、更少的滚屏，也更容易连续阅读真正重要的回答。
 
@@ -20,7 +20,7 @@
 - **按需查看过程** — 极简不等于丢失信息。需要排查时，可用 `/verbose` 查看后续工具输出，或用 `/tool N` 查看已保留的调用详情；完整记录仍由 DSH Session 持久化。
 - **安全的思考提示** — 模型推理期间显示简洁的 `[thinking]` 状态，但不会把内部 reasoning 内容输出到终端。
 
-这是一种有意为之的取舍：不是减少能力，而是减少干扰。DSH 的模型路由、工具执行、审批、Agent 生命周期及 Session 持久化机制保持不变。
+这是一种有意为之的取舍：**Mini 是界面，不是能力。** DSH 的模型路由、工具执行、审批、Agent 生命周期及 Session 持久化机制保持不变。
 
 ## 插件特点
 

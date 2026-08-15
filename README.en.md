@@ -1,14 +1,14 @@
-# DeepSeek Harness TUI — DSH Plugin
+# DSH Mini TUI — Minimal Terminal Plugin for DeepSeek Harness
 
 English | [中文](README.md)
 
 A minimalist terminal UI plugin for [DeepSeek Harness (DSH)](https://github.com/deepseek-ai/deepseek-harness). It keeps the complete agent and tool workflow while moving routine execution activity out of the way, leaving the terminal focused on your input and the model's final answer.
 
-**DSH-TUI** is playfully nicknamed **“单身汉 TUI”** in Chinese, based on the sound of the DSH initials.
+The interface is called **DSH Mini TUI**: `Mini` describes less interface noise, not fewer Harness capabilities. The package remains `deepseek-harness-tui`, so existing install commands, repository links, and DSH profiles do not need to change. Its playful Chinese nickname can continue as **“单身汉 Mini TUI”**, based on the sound of the DSH initials.
 
 ![New DeepSeek Harness TUI startup screen](assets/tui-startup-dashboard.png)
 
-## Minimal by design: less process, more answer
+## What Mini means: less process, more answer
 
 The design principle is simple: **tools should keep working without taking over the screen.** Less routine status output means clearer context, less scrolling, and a conversation that is easier to read from beginning to end.
 
@@ -20,7 +20,7 @@ The design principle is simple: **tools should keep working without taking over 
 - **Details on demand** — minimal does not mean lost information. `/verbose` reveals subsequent tool output, `/tool N` opens retained call details, and the complete record remains durable in the DSH Session log.
 - **Private thinking state** — a concise `[thinking]` indicator appears during model reasoning without printing internal reasoning content.
 
-This is a deliberate tradeoff: less distraction, not less capability. DSH continues to own model routing, tool execution, approvals, the agent lifecycle, and Session persistence.
+This is a deliberate tradeoff: **the interface is Mini; the capability is not.** DSH continues to own model routing, tool execution, approvals, the agent lifecycle, and Session persistence.
 
 ## Why this plugin
 
