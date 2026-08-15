@@ -4,7 +4,7 @@
 
 [DeepSeek Harness（DSH）](https://github.com/deepseek-ai/deepseek-harness) 的极简终端 UI 插件。它保留完整的 Agent 与工具能力，但默认把执行过程收进后台，让终端专注于你的输入和模型的最终回答。
 
-界面与 npm 包名称为 **DSH Mini TUI** / `dsh-mini-tui`：`Mini` 指更少的界面噪声，而不是更少的 Harness 能力。GitHub 仓库地址继续保持不变。中文也可以昵称为 **“单身汉 Mini TUI”**，取自 DSH 的谐音。
+界面、npm 包与 GitHub 仓库统一命名为 **DSH Mini TUI** / [`dsh-mini-tui`](https://github.com/boxeryao/dsh-mini-tui)：`Mini` 指更少的界面噪声，而不是更少的 Harness 能力。中文也可以昵称为 **“单身汉 Mini TUI”**，取自 DSH 的谐音。
 
 ![DSH Mini TUI — Welcome to DeepSeek](assets/dsh-mini-tui-welcome.png)
 

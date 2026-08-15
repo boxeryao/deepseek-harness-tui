@@ -4,7 +4,7 @@ English | [中文](README.md)
 
 A minimalist terminal UI plugin for [DeepSeek Harness (DSH)](https://github.com/deepseek-ai/deepseek-harness). It keeps the complete agent and tool workflow while moving routine execution activity out of the way, leaving the terminal focused on your input and the model's final answer.
 
-The interface and npm package are named **DSH Mini TUI** / `dsh-mini-tui`: `Mini` describes less interface noise, not fewer Harness capabilities. The GitHub repository URL remains unchanged. Its playful Chinese nickname can continue as **“单身汉 Mini TUI”**, based on the sound of the DSH initials.
+The interface, npm package, and GitHub repository share the name **DSH Mini TUI** / [`dsh-mini-tui`](https://github.com/boxeryao/dsh-mini-tui): `Mini` describes less interface noise, not fewer Harness capabilities. Its playful Chinese nickname can continue as **“单身汉 Mini TUI”**, based on the sound of the DSH initials.
 
 ![DSH Mini TUI — Welcome to DeepSeek](assets/dsh-mini-tui-welcome.png)
 

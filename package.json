@@ -54,7 +54,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/boxeryao/deepseek-harness-tui.git"
+    "url": "git+https://github.com/boxeryao/dsh-mini-tui.git"
   },
   "dsh": {
     "bundle": {
