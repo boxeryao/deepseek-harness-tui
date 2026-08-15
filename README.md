@@ -6,6 +6,8 @@
 
 界面与 npm 包名称为 **DSH Mini TUI** / `dsh-mini-tui`：`Mini` 指更少的界面噪声，而不是更少的 Harness 能力。GitHub 仓库地址继续保持不变。中文也可以昵称为 **“单身汉 Mini TUI”**，取自 DSH 的谐音。
 
+![DSH Mini TUI — Welcome to DeepSeek](assets/dsh-mini-tui-welcome.png)
+
 ![新版 DeepSeek Harness TUI 启动界面](assets/tui-startup-dashboard.png)
 
 ## Mini 的含义：少显示，专注回答

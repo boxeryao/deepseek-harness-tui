@@ -6,6 +6,8 @@ A minimalist terminal UI plugin for [DeepSeek Harness (DSH)](https://github.com/
 
 The interface and npm package are named **DSH Mini TUI** / `dsh-mini-tui`: `Mini` describes less interface noise, not fewer Harness capabilities. The GitHub repository URL remains unchanged. Its playful Chinese nickname can continue as **“单身汉 Mini TUI”**, based on the sound of the DSH initials.
 
+![DSH Mini TUI — Welcome to DeepSeek](assets/dsh-mini-tui-welcome.png)
+
 ![New DeepSeek Harness TUI startup screen](assets/tui-startup-dashboard.png)
 
 ## What Mini means: less process, more answer
