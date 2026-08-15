@@ -2,7 +2,8 @@
 
 ## Unreleased
 
-- Added a restrained deep-sea visual theme and a compact startup dashboard.
+- Redesigned the startup screen with a true-color `DEEPSEEK` gradient, compact model and workspace context, and a direct `/help` hint.
+- Added a restrained deep-sea palette with consistent status styling and deterministic colors for file and directory references.
 - Kept successful tool activity quiet by default while retaining details for `/tool N`.
 - Added a compact thinking indicator without displaying reasoning content.
 - Added portable Windows launch, local-profile, and Explorer context-menu helpers.

@@ -6,7 +6,20 @@ A lightweight and fast terminal UI plugin for [DeepSeek Harness (DSH)](https://g
 
 **DSH-TUI** is playfully nicknamed **“单身汉 TUI”** in Chinese, based on the sound of the DSH initials.
 
-![DeepSeek Harness TUI](assets/tui-windows.png)
+![New DeepSeek Harness TUI startup screen](assets/tui-startup-dashboard.png)
+
+## New startup experience
+
+The startup screen has been redesigned to make the active session easier to scan while removing information that does not need to compete with the conversation:
+
+- **Gradient identity** — the `DEEPSEEK` wordmark uses a true-color cyan-to-deep-blue gradient for a distinct, consistent terminal identity.
+- **Compact runtime context** — only the active model, working directory, and `/help` hint remain below the wordmark; Session ID, platform version, permission mode, and the shortcut panel no longer crowd the dashboard.
+- **Deep-sea palette** — input borders, status labels, paths, and the thinking indicator share a restrained ocean palette designed for extended terminal use.
+- **Stable path colors** — file and directory references receive deterministic colors, making targets easier to find in logs and retained tool details.
+- **Quiet conversation flow** — successful tool calls stay hidden by default, while failures use one compact line. `/verbose` reveals subsequent tool output and `/tool N` opens retained call details when needed.
+- **Private thinking state** — a concise `[thinking]` indicator appears during model reasoning without printing internal reasoning content.
+
+This update changes only terminal presentation and information hierarchy. DSH continues to own model routing, tool execution, approvals, the agent lifecycle, and Session persistence.
 
 ## Why this plugin
 
