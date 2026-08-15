@@ -2,24 +2,25 @@
 
 English | [中文](README.md)
 
-A lightweight and fast terminal UI plugin for [DeepSeek Harness (DSH)](https://github.com/deepseek-ai/deepseek-harness). It connects directly to DSH's agent, tool, permission, and Session services instead of recreating the Harness runtime.
+A minimalist terminal UI plugin for [DeepSeek Harness (DSH)](https://github.com/deepseek-ai/deepseek-harness). It keeps the complete agent and tool workflow while moving routine execution activity out of the way, leaving the terminal focused on your input and the model's final answer.
 
 **DSH-TUI** is playfully nicknamed **“单身汉 TUI”** in Chinese, based on the sound of the DSH initials.
 
 ![New DeepSeek Harness TUI startup screen](assets/tui-startup-dashboard.png)
 
-## New startup experience
+## Minimal by design: less process, more answer
 
-The startup screen has been redesigned to make the active session easier to scan while removing information that does not need to compete with the conversation:
+The design principle is simple: **tools should keep working without taking over the screen.** Less routine status output means clearer context, less scrolling, and a conversation that is easier to read from beginning to end.
 
 - **Gradient identity** — the `DEEPSEEK` wordmark uses a true-color cyan-to-deep-blue gradient for a distinct, consistent terminal identity.
 - **Compact runtime context** — only the active model, working directory, and `/help` hint remain below the wordmark; Session ID, platform version, permission mode, and the shortcut panel no longer crowd the dashboard.
 - **Deep-sea palette** — input borders, status labels, paths, and the thinking indicator share a restrained ocean palette designed for extended terminal use.
 - **Stable path colors** — file and directory references receive deterministic colors, making targets easier to find in logs and retained tool details.
-- **Quiet conversation flow** — successful tool calls stay hidden by default, while failures use one compact line. `/verbose` reveals subsequent tool output and `/tool N` opens retained call details when needed.
+- **Answer-first conversation flow** — successful tool calls stay hidden by default, so the terminal primarily shows user input and model responses; failures still surface as one compact line instead of disappearing silently.
+- **Details on demand** — minimal does not mean lost information. `/verbose` reveals subsequent tool output, `/tool N` opens retained call details, and the complete record remains durable in the DSH Session log.
 - **Private thinking state** — a concise `[thinking]` indicator appears during model reasoning without printing internal reasoning content.
 
-This update changes only terminal presentation and information hierarchy. DSH continues to own model routing, tool execution, approvals, the agent lifecycle, and Session persistence.
+This is a deliberate tradeoff: less distraction, not less capability. DSH continues to own model routing, tool execution, approvals, the agent lifecycle, and Session persistence.
 
 ## Why this plugin
 
