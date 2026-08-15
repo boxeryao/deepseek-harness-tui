@@ -1,9 +1,9 @@
-/** Package-owned invariant companion for deepseek-harness-tui. */
+/** Package-owned invariant companion for dsh-mini-tui. */
 
 import type { Context } from '@deepseek-ai/cordis'
 import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
 
-const PACKAGE_NAME = 'deepseek-harness-tui'
+const PACKAGE_NAME = 'dsh-mini-tui'
 
 /** Cordis companion plugin name. */
 export const name = 'tui-invariant'

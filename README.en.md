@@ -4,7 +4,7 @@ English | [中文](README.md)
 
 A minimalist terminal UI plugin for [DeepSeek Harness (DSH)](https://github.com/deepseek-ai/deepseek-harness). It keeps the complete agent and tool workflow while moving routine execution activity out of the way, leaving the terminal focused on your input and the model's final answer.
 
-The interface is called **DSH Mini TUI**: `Mini` describes less interface noise, not fewer Harness capabilities. The package remains `deepseek-harness-tui`, so existing install commands, repository links, and DSH profiles do not need to change. Its playful Chinese nickname can continue as **“单身汉 Mini TUI”**, based on the sound of the DSH initials.
+The interface and npm package are named **DSH Mini TUI** / `dsh-mini-tui`: `Mini` describes less interface noise, not fewer Harness capabilities. The GitHub repository URL remains unchanged. Its playful Chinese nickname can continue as **“单身汉 Mini TUI”**, based on the sound of the DSH initials.
 
 ![New DeepSeek Harness TUI startup screen](assets/tui-startup-dashboard.png)
 
@@ -31,9 +31,14 @@ This is a deliberate tradeoff: **the interface is Mini; the capability is not.**
 
 ## Quick install
 
-> The unscoped `deepseek-harness-tui` package on npm belongs to a different project. Do not use that package name to install this project.
+Install the latest DSH Mini TUI package from npm into the DSH `tui` profile:
 
-The official scoped npm package for DSH Mini TUI is being prepared. Until it is published, use the source-checkout installation below.
+```powershell
+dsh plugin --profile tui add dsh-mini-tui@latest
+dsh --profile tui
+```
+
+> Note: the `deepseek-harness-tui` package on npm belongs to a different project. The correct package name for this project is `dsh-mini-tui`.
 
 ## Requirements
 
@@ -52,7 +57,7 @@ dsh plugin --profile tui add .
 dsh --profile tui
 ```
 
-The `dsh plugin --profile tui add .` command installs the current source checkout. The package consumes published `@deepseek-ai/*` packages at `0.1.0-rc.6`; it has no monorepo-relative or `workspace:^` dependency.
+The `dsh plugin --profile tui add .` command installs the current source checkout; regular users should prefer the npm quick-install command above. The package consumes published `@deepseek-ai/*` packages at `0.1.0-rc.6`; it has no monorepo-relative or `workspace:^` dependency.
 
 ## Input and commands
 

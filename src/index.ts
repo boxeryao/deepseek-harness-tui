@@ -1,6 +1,6 @@
 /**
- * deepseek-harness-tui — an interactive terminal driver over dsh-base.
- * @module deepseek-harness-tui
+ * dsh-mini-tui — a minimalist interactive terminal driver over dsh-base.
+ * @module dsh-mini-tui
  */
 
 import { randomUUID } from 'node:crypto'

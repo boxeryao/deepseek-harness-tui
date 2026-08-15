@@ -1,9 +1,9 @@
 # Changelog
 
-## Unreleased
+## 0.2.0 — 2026-08-15
 
-- Reserved quick-install documentation for the forthcoming scoped npm package; the matching unscoped name is owned by another project.
-- Introduced **DSH Mini TUI** as the interface name while keeping the `deepseek-harness-tui` package and repository identity stable.
+- Published the plugin under the unique npm package name `dsh-mini-tui` and documented one-line installation for the DSH `tui` profile.
+- Introduced **DSH Mini TUI** as the interface and package name while keeping the existing GitHub repository URL.
 - Redesigned the startup screen with a true-color `DEEPSEEK` gradient, compact model and workspace context, and a direct `/help` hint.
 - Added a restrained deep-sea palette with consistent status styling and deterministic colors for file and directory references.
 - Clarified the answer-first interface: routine tool activity stays out of the conversation without removing tools, failure visibility, retained details, or durable Session logs.

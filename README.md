@@ -4,7 +4,7 @@
 
 [DeepSeek Harness（DSH）](https://github.com/deepseek-ai/deepseek-harness) 的极简终端 UI 插件。它保留完整的 Agent 与工具能力，但默认把执行过程收进后台，让终端专注于你的输入和模型的最终回答。
 
-界面名称为 **DSH Mini TUI**：`Mini` 指更少的界面噪声，而不是更少的 Harness 能力。项目包名继续使用 `deepseek-harness-tui`，因此现有安装命令、仓库链接和 DSH profile 无需改变。中文也可以继续昵称为 **“单身汉 Mini TUI”**，取自 DSH 的谐音。
+界面与 npm 包名称为 **DSH Mini TUI** / `dsh-mini-tui`：`Mini` 指更少的界面噪声，而不是更少的 Harness 能力。GitHub 仓库地址继续保持不变。中文也可以昵称为 **“单身汉 Mini TUI”**，取自 DSH 的谐音。
 
 ![新版 DeepSeek Harness TUI 启动界面](assets/tui-startup-dashboard.png)
 
@@ -31,9 +31,14 @@
 
 ## 快速安装
 
-> npm 上未加作用域的 `deepseek-harness-tui` 属于另一个项目，请勿使用该包名安装本项目。
+从 npm 将最新版 DSH Mini TUI 安装到 DSH 的 `tui` profile：
 
-DSH Mini TUI 的正式 npm 包正在准备中。在作用域包发布前，请使用下方的本地源码安装方式。
+```powershell
+dsh plugin --profile tui add dsh-mini-tui@latest
+dsh --profile tui
+```
+
+> 注意：npm 上的 `deepseek-harness-tui` 属于另一个项目。本项目的正确包名是 `dsh-mini-tui`。
 
 ## 环境要求
 
@@ -52,7 +57,7 @@ dsh plugin --profile tui add .
 dsh --profile tui
 ```
 
-这里的 `dsh plugin --profile tui add .` 用于安装当前源码目录。本包使用 npm 已发布的 `0.1.0-rc.6` 版 `@deepseek-ai/*` 包，不包含 monorepo 相对路径或 `workspace:^` 依赖。
+这里的 `dsh plugin --profile tui add .` 用于安装当前源码目录；普通用户应优先使用上面的 npm 快速安装命令。本包使用 npm 已发布的 `0.1.0-rc.6` 版 `@deepseek-ai/*` 包，不包含 monorepo 相对路径或 `workspace:^` 依赖。
 
 ## 输入与命令
 
