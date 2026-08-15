@@ -1,0 +1,15 @@
+Windows Registry Editor Version 5.00
+
+; Removes the current user's "Open DSH TUI here" right-click menu entries.
+
+[-HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\dsh-tui]
+
+[-HKEY_CURRENT_USER\Software\Classes\Directory\shell\dsh-tui]
+
+[-HKEY_CURRENT_USER\Software\Classes\Drive\shell\dsh-tui]
+
+[-HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\dsh-tui-full-access]
+
+[-HKEY_CURRENT_USER\Software\Classes\Directory\shell\dsh-tui-full-access]
+
+[-HKEY_CURRENT_USER\Software\Classes\Drive\shell\dsh-tui-full-access]

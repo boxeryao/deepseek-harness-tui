@@ -17,6 +17,13 @@ function textDelta(text: string): SessionEvent<'assistant/chunk'> {
   }
 }
 
+function reasoningStart(): SessionEvent<'assistant/chunk'> {
+  return {
+    type: 'assistant/chunk', seq: 0, time: 0,
+    data: { turn: 1, step: 1, chunk: { type: 'block-start', index: 0, blockType: 'reasoning' } },
+  }
+}
+
 function completed(text: string): SessionEvent<'assistant/message'> {
   return {
     type: 'assistant/message', seq: 1, time: 1,
@@ -66,10 +73,27 @@ describe('assistant renderer', () => {
 
     expect(output).toBe('\ndraft final\n\n')
   })
+
+  it('renders a compact thinking state without printing reasoning text', () => {
+    let output = ''
+    internals.output = { write: (chunk: string) => { output += chunk; return true } } as typeof process.stdout
+    const render = createAssistantRenderer()
+
+    render(reasoningStart())
+    render({
+      type: 'assistant/chunk', seq: 1, time: 0,
+      data: { turn: 1, step: 1, chunk: { type: 'reasoning-delta', index: 0, text: 'private reasoning' } },
+    })
+    render(textDelta('Answer'))
+    render(completed('Answer'))
+
+    expect(output).toBe('\n[thinking] tracing the deep current...\n\nAnswer\n\n')
+    expect(output).not.toContain('private reasoning')
+  })
 })
 
 describe('tool renderer', () => {
-  it('matches parallel results to their numbered tool calls', () => {
+  it('keeps successful tool calls quiet while retaining numbered details', () => {
     let output = ''
     internals.output = { write: (chunk: string) => { output += chunk; return true } } as typeof process.stdout
     const render = createToolRenderer()
@@ -87,11 +111,11 @@ describe('tool renderer', () => {
       data: { turn: 1, step: 1, message: createToolResultMessage({ callId: first, content: [], isError: false }) },
     })
 
-    expect(output).toBe('\n[1] read…\n\n[2] read…\n[2] read completed (0.5s)\n[1] read completed (3.3s)\n')
+    expect(output).toBe('')
     expect(render.detail(1)).toBe('Input\n{}\n\nResult\n')
   })
 
-  it('renders tool-owned command and result presentations', () => {
+  it('keeps tool-owned presentations available through detail lookup', () => {
     let output = ''
     internals.output = { write: (chunk: string) => { output += chunk; return true } } as typeof process.stdout
     const render = createToolRenderer(() => ({
@@ -106,7 +130,7 @@ describe('tool renderer', () => {
       turn: 1, step: 1, message: createToolResultMessage({ callId, content: [{ type: 'text', text: 'raw' }], isError: false }),
     } })
 
-    expect(output).toBe('\n[1] Get-ChildItem…\n[1] Get-ChildItem completed (1.5s) — exit 0\n')
+    expect(output).toBe('')
     expect(render.detail(1)).toContain('Input\nE:\\work\nGet-ChildItem')
     expect(render.detail(1)).toContain('Result\nREADME.md\nsrc\nexit 0')
   })
@@ -125,7 +149,23 @@ describe('tool renderer', () => {
     } })
 
     expect(output).toContain('    {\n      "path": "README.md"\n    … 1 lines omitted')
-    expect(output).toContain('[1] read failed: READ_FAILED (1.0s)\n    one\n    two\n    … 1 lines omitted')
+    expect(output).toContain('[tool 1] read failed: READ_FAILED (1.0s)\n    one\n    two\n    … 1 lines omitted')
+  })
+
+  it('prints only a compact line for failed tools outside verbose mode', () => {
+    let output = ''
+    internals.output = { write: (chunk: string) => { output += chunk; return true } } as typeof process.stdout
+    const render = createToolRenderer()
+    const callId = CallId('read-1')
+
+    render({ type: 'tool/call', seq: 0, time: 1_000, data: { turn: 1, step: 1, callId, name: 'read', arguments: '{}' } })
+    render({ type: 'tool/result', seq: 1, time: 2_000, surfaceOp: 'append', data: {
+      turn: 1, step: 1, error: { code: 'READ_FAILED', name: 'ReadError' },
+      message: createToolResultMessage({ callId, content: [{ type: 'text', text: 'private detail' }], isError: true }),
+    } })
+
+    expect(output).toBe('\n[tool failed] read: READ_FAILED\n\n')
+    expect(render.detail(1)).toContain('private detail')
   })
 
   it('retains only the configured number of tool details', () => {
@@ -148,20 +188,18 @@ describe('tool renderer', () => {
 })
 
 describe('welcome screen', () => {
-  it('reports the active workspace, model, access mode, and input commands', () => {
+  it('reports only the active workspace, model, and help hint', () => {
     const originalPermission = process.env.DSH_PERMISSION_MODE
     process.env.DSH_PERMISSION_MODE = 'danger-full-access'
     try {
       const screen = welcomeScreen({ cwd: 'E:\\work', provider: 'deepseek', model: 'deepseek-chat', sessionId: 'session-test' })
 
-      expect(screen).toContain('Workspace E:\\work')
-      expect(screen).toContain('deepseek / deepseek-chat')
-      expect(screen).toContain('FULL ACCESS — no approval prompts')
-      expect(screen).toContain('Shift+Enter / Ctrl+J adds a line')
-      expect(screen).toContain('Ctrl+V multi-line clipboard')
-      expect(screen).toContain('Ctrl+C cancel')
-      expect(screen).toContain('/verbose')
-      expect(screen).toContain('/tool N')
+      expect(screen).toContain('D E E P S E E K  T U I')
+      expect(screen).toContain('deepseek/deepseek-chat')
+      expect(screen).toContain('cwd E:\\work')
+      expect(screen).toContain('/help commands')
+      expect(screen).not.toContain('session-test')
+      expect(screen).not.toContain('FULL ACCESS')
     } finally {
       if (originalPermission === undefined) delete process.env.DSH_PERMISSION_MODE
       else process.env.DSH_PERMISSION_MODE = originalPermission

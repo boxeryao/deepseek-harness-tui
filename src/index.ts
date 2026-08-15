@@ -55,63 +55,104 @@ const execFileAsync = promisify(execFile)
 const ansi = {
   reset: '\u001B[0m',
   dim: '\u001B[2m',
-  cyan: '\u001B[36m',
-  green: '\u001B[32m',
-  yellow: '\u001B[33m',
   bold: '\u001B[1m',
+  fg: (rgb: RGB): string => `\u001B[38;2;${rgb[0]};${rgb[1]};${rgb[2]}m`,
 }
 
+type RGB = readonly [number, number, number]
+type ThemeColor = keyof typeof theme
+
+const theme = {
+  foam: [160, 245, 255],
+  tide: [92, 225, 255],
+  azure: [38, 148, 255],
+  indigo: [62, 78, 255],
+  kelp: [82, 196, 188],
+  current: [86, 164, 224],
+  trench: [54, 102, 150],
+  muted: [95, 132, 164],
+  warning: [129, 187, 225],
+  danger: [125, 154, 216],
+} as const
+
+const pathPalette: readonly RGB[] = [
+  [92, 225, 255],
+  [82, 196, 188],
+  [86, 164, 224],
+  [100, 139, 220],
+  [116, 154, 205],
+]
+
+const dashboardLogo = [
+  '██████╗  ███████╗ ███████╗ ██████╗  ███████╗ ███████╗ ███████╗ ██╗  ██╗',
+  '██╔══██╗ ██╔════╝ ██╔════╝ ██╔══██╗ ██╔════╝ ██╔════╝ ██╔════╝ ██║ ██╔╝',
+  '██║  ██║ █████╗   █████╗   ██████╔╝ ███████╗ █████╗   █████╗   █████╔╝ ',
+  '██║  ██║ ██╔══╝   ██╔══╝   ██╔═══╝  ╚════██║ ██╔══╝   ██╔══╝   ██╔═██╗ ',
+  '██████╔╝ ███████╗ ███████╗ ██║      ███████║ ███████╗ ███████╗ ██║  ██╗',
+  '╚═════╝  ╚══════╝ ╚══════╝ ╚═╝      ╚══════╝ ╚══════╝ ╚══════╝ ╚═╝  ╚═╝',
+]
+
 /** Apply terminal emphasis when the output stream supports ANSI color. */
-function paint(value: string, color: keyof typeof ansi): string {
-  return internals.output.isTTY ? `${ansi[color]}${value}${ansi.reset}` : value
+function paint(value: string, color: ThemeColor, options: { dim?: boolean; bold?: boolean } = {}): string {
+  if (!internals.output.isTTY) return value
+  return `${options.dim === true ? ansi.dim : ''}${options.bold === true ? ansi.bold : ''}${ansi.fg(theme[color])}${value}${ansi.reset}`
+}
+
+function mix(a: RGB, b: RGB, t: number): RGB {
+  return [
+    Math.round(a[0] + (b[0] - a[0]) * t),
+    Math.round(a[1] + (b[1] - a[1]) * t),
+    Math.round(a[2] + (b[2] - a[2]) * t),
+  ]
+}
+
+function gradientText(value: string): string {
+  if (!internals.output.isTTY) return value
+  return Array.from(value, (char, index) => {
+    const t = index / Math.max(1, value.length - 1)
+    const color = t < 0.5 ? mix(theme.tide, theme.azure, t / 0.5) : mix(theme.azure, theme.indigo, (t - 0.5) / 0.5)
+    return `${ansi.fg(color)}${char}`
+  }).join('') + ansi.reset
+}
+
+function pathColor(value: string): RGB {
+  let hash = 0
+  for (const char of value) hash = (hash * 31 + char.charCodeAt(0)) >>> 0
+  return pathPalette[hash % pathPalette.length] ?? theme.current
+}
+
+function colorizePaths(value: string): string {
+  if (!internals.output.isTTY) return value
+  const pathPattern = /(?<![\w.-])(?:[A-Za-z]:\\[^\s"'<>|]+|(?:\.{1,2}[\\/])?[A-Za-z0-9_.@-]+(?:[\\/][A-Za-z0-9_.@-]+)+|[A-Za-z0-9_.@-]+\.(?:[cm]?[jt]sx?|json|ya?ml|md|txt|py|css|html|reg|cmd|ps1))(?![\w.-])/gu
+  return value.replace(pathPattern, match => `${ansi.fg(pathColor(match))}${match}${ansi.reset}`)
+}
+
+function statusTag(label: string, color: ThemeColor): string {
+  return paint(`[${label}]`, color, { bold: true })
 }
 
 /**
- * Render the terminal session's initial status board.
- * @param details - Active workspace, model, and session identifiers.
- * @returns The complete welcome board.
+ * Render the terminal session's initial status.
+ * @param details - Active workspace and model identifiers.
+ * @returns The complete welcome text.
  */
 export function welcomeScreen(details: { cwd: string; provider: string; model: string; sessionId: string }): string {
-  const permission = process.env.DSH_PERMISSION_MODE ?? 'workspace-write'
-  const access = permission === 'danger-full-access' ? 'FULL ACCESS — no approval prompts' : `${permission} — approvals enabled`
-  const width = 76
-  const line = (plain: string, rendered = plain) => {
-    const padding = Math.max(1, width - plain.length - 4)
-    return `│ ${rendered}${' '.repeat(padding)} │\n`
-  }
-  const detail = (label: string, value: string, renderedValue = value) => line(`${label}${value}`, `${paint(label, 'dim')}${renderedValue}`)
-  const divider = '├' + '─'.repeat(width - 2) + '┤\n'
-  const top = '┌' + '─'.repeat(width - 2) + '┐\n'
-  const bottom = '└' + '─'.repeat(width - 2) + '┘\n'
-  const title = '  DEEPSEEK HARNESS'
-  const subtitle = 'INTERACTIVE TERMINAL'
-  const header = `${title}${' '.repeat(width - title.length - subtitle.length - 4)}${subtitle}`
-
   return '\n'
-    + paint(top, 'cyan')
-    + paint(line(header), 'cyan')
-    + paint(divider, 'cyan')
-    + detail('  Workspace ', details.cwd)
-    + detail('  Model     ', `${details.provider} / ${details.model}`)
-    + detail('  Access    ', access, paint(access, permission === 'danger-full-access' ? 'yellow' : 'green'))
-    + detail('  Platform  ', `${process.platform} · Node ${process.version}`)
-    + detail('  Session   ', details.sessionId)
-    + paint(divider, 'cyan')
-    + line('  Input    Enter sends    Shift+Enter / Ctrl+J adds a line', `  ${paint('Input', 'bold')}    Enter sends    Shift+Enter / Ctrl+J adds a line`)
-    + line('  Paste    Ctrl+V multi-line clipboard    /paste Windows clipboard', `  ${paint('Paste', 'bold')}    Ctrl+V multi-line clipboard    /paste Windows clipboard`)
-    + line('  Control  Ctrl+C cancel    /verbose    /tool N    /help', `  ${paint('Control', 'bold')}  Ctrl+C cancel    /verbose    /tool N    /help`)
-    + paint(bottom, 'cyan')
+    + dashboardLogo.map(line => gradientText(line)).join('\n')
     + '\n'
+    + `${paint('D E E P S E E K  T U I', 'tide', { bold: true })} ${paint(`${details.provider}/${details.model}`, 'muted')}\n`
+    + `${paint('cwd', 'trench')} ${colorizePaths(details.cwd)}\n`
+    + `${paint('/help', 'muted')} ${paint('commands', 'trench')}\n\n`
 }
 
 const editorTheme: EditorTheme = {
-  borderColor: value => paint(value, 'cyan'),
+  borderColor: value => paint(value, 'azure'),
   selectList: {
-    selectedPrefix: value => paint(value, 'cyan'),
+    selectedPrefix: value => paint(value, 'tide'),
     selectedText: value => value,
-    description: value => paint(value, 'dim'),
-    scrollInfo: value => paint(value, 'dim'),
-    noMatch: value => paint(value, 'dim'),
+    description: value => paint(value, 'muted'),
+    scrollInfo: value => paint(value, 'muted'),
+    noMatch: value => paint(value, 'muted'),
   },
 }
 
@@ -182,12 +223,27 @@ function stepKey(turn: number, step: number): string {
  */
 export function createAssistantRenderer(): (event: SessionEvent) => void {
   const streamed = new Map<string, string>()
+  const thinking = new Set<string>()
+
+  const renderThinking = (key: string): void => {
+    if (thinking.has(key)) return
+    thinking.add(key)
+    internals.output.write(`\n${statusTag('thinking', 'kelp')} ${paint('tracing the deep current...', 'muted')}\n`)
+  }
 
   return (event: SessionEvent): void => {
     if (event.type === 'assistant/chunk') {
       const { chunk, turn, step } = event.data
-      if (chunk.type !== 'text-delta') return
       const key = stepKey(turn, step)
+      if (chunk.type === 'block-start' && chunk.blockType === 'reasoning') {
+        renderThinking(key)
+        return
+      }
+      if (chunk.type === 'reasoning-delta') {
+        renderThinking(key)
+        return
+      }
+      if (chunk.type !== 'text-delta') return
       const previous = streamed.get(key)
       if (previous === undefined) internals.output.write('\n')
       internals.output.write(chunk.text)
@@ -198,6 +254,7 @@ export function createAssistantRenderer(): (event: SessionEvent) => void {
     const key = stepKey(event.data.turn, event.data.step)
     const streamedText = streamed.get(key)
     streamed.delete(key)
+    thinking.delete(key)
     const text = assistantText(event)
     if (streamedText === undefined) {
       if (text !== '') internals.output.write(`\n${text}\n\n`)
@@ -209,7 +266,7 @@ export function createAssistantRenderer(): (event: SessionEvent) => void {
   }
 }
 
-/** A durable tool renderer with runtime detail controls. */
+/** A quiet-by-default tool renderer with runtime detail controls. */
 export interface ToolRenderer {
   (event: SessionEvent): void
   /** Toggle complete tool details for subsequent events. */
@@ -219,7 +276,7 @@ export interface ToolRenderer {
 }
 
 /**
- * Render durable execution milestones with a stable label for each parallel tool call.
+ * Retain durable tool details with a stable label for each parallel tool call.
  * @param resolveTool - Resolves the call's scoped presentation definition.
  * @param limits - Bounds retained and printed details.
  * @returns A Session-event listener with runtime detail controls.
@@ -233,7 +290,7 @@ export function createToolRenderer(
   let nextLabel = 1
   let verbose = false
 
-  const indent = (value: string): string => value.split('\n').map(line => `    ${line}`).join('\n')
+  const indent = (value: string): string => value.split('\n').map(line => `    ${colorizePaths(line)}`).join('\n')
   const formatValue = (value: unknown): string => typeof value === 'string' ? value : JSON.stringify(value, undefined, 2)
   const retainDetail = (label: number, value: string): void => {
     details.delete(label)
@@ -308,7 +365,7 @@ export function createToolRenderer(
         const title = view?.title ?? call.name
         const detail = callDetail(view, args)
         retainDetail(call.label, `Input\n${truncate(detail)}`)
-        internals.output.write(`\n[${String(call.label)}] ${title}…${verbose && detail !== '' ? `\n${indent(truncate(detail))}` : ''}\n`)
+        if (verbose) internals.output.write(`\n${statusTag(`tool ${String(call.label)}`, 'azure')} ${paint(title, 'current')} ${paint('running', 'muted')}${detail === '' ? '' : `\n${indent(truncate(detail))}`}\n`)
         return
       }
       case 'tool/result': {
@@ -323,7 +380,7 @@ export function createToolRenderer(
           ...event.data.meta === undefined ? {} : { meta: event.data.meta },
         })
         const title = view?.title ?? call?.view?.title ?? call?.name
-        const prefix = call === undefined ? '[tool]' : `[${String(call.label)}] ${title ?? call.name}`
+        const prefix = call === undefined ? statusTag('tool', 'azure') : statusTag(`tool ${String(call.label)}`, 'azure') + ` ${paint(title ?? call.name, 'current')}`
         const elapsed = call === undefined ? '' : ` (${((event.time - call.time) / 1000).toFixed(1)}s)`
         const detail = resultDetail(view, event)
         const status = event.data.error === undefined ? `completed${elapsed}` : `failed: ${event.data.error.code}${elapsed}`
@@ -332,20 +389,27 @@ export function createToolRenderer(
           const retained = details.get(call.label) ?? 'Input'
           retainDetail(call.label, `${retained}\n\nResult\n${truncate(detail)}`)
         }
-        const showDetail = verbose || event.data.error !== undefined
-        internals.output.write(`${prefix} ${status}${summary === '' ? '' : ` — ${summary}`}${showDetail && detail !== '' ? `\n${indent(truncate(detail))}` : ''}\n`)
+        if (!verbose && event.data.error === undefined) return
+        if (!verbose) {
+          internals.output.write(`\n${statusTag('tool failed', 'danger')} ${paint(title ?? call?.name ?? 'tool', 'current')}: ${paint(event.data.error?.code ?? 'unknown', 'danger')}\n\n`)
+          return
+        }
+        internals.output.write(`${prefix} ${paint(status, event.data.error === undefined ? 'kelp' : 'danger')}${summary === '' ? '' : ` — ${paint(summary, 'muted')}`}${detail === '' ? '' : `\n${indent(truncate(detail))}`}\n`)
         return
       }
       case 'turn/end':
-        if (event.data.reason.kind === 'aborted') internals.output.write('\n[task cancelled]\n\n')
-        if (event.data.reason.kind === 'error') internals.output.write(`\n[task failed: ${event.data.reason.error.message}]\n\n`)
+        if (event.data.reason.kind === 'aborted') internals.output.write(`\n${statusTag('task cancelled', 'warning')}\n\n`)
+        if (event.data.reason.kind === 'error') internals.output.write(`\n${statusTag('task failed', 'danger')} ${event.data.reason.error.message}\n\n`)
         return
       default:
         return
     }
   }
   render.toggleVerbose = () => { verbose = !verbose; return verbose }
-  render.detail = (label: number) => details.get(label)
+  render.detail = (label: number) => {
+    const detail = details.get(label)
+    return detail === undefined ? undefined : colorizePaths(detail)
+  }
   return render
 }
 
@@ -356,7 +420,7 @@ function terminalQuestions(): UserQuestionProvider {
       const answers: AskUserQuestionAnswer['answers'] = []
       for (const item of request.questions) {
         const heading = item.header === undefined ? '' : `${item.header}: `
-        internals.output.write(`\n[question] ${heading}${item.question}\n`)
+        internals.output.write(`\n${statusTag('question', 'tide')} ${heading}${item.question}\n`)
         if (item.detail !== undefined) internals.output.write(`${item.detail}\n`)
         for (const [index, option] of (item.options ?? []).entries()) {
           internals.output.write(`  ${String(index + 1)}. ${option.label}${option.description === undefined ? '' : ` — ${option.description}`}\n`)
@@ -379,7 +443,7 @@ function terminalQuestions(): UserQuestionProvider {
 async function terminalApproval(
   toolName: string, reason: string | undefined, signal: AbortSignal | undefined,
 ): Promise<ApprovalOutcome> {
-  internals.output.write(`\n[approval] Allow ${toolName}${reason === undefined ? '' : `: ${reason}`}\n`)
+  internals.output.write(`\n${statusTag('approval', 'warning')} Allow ${paint(toolName, 'current')}${reason === undefined ? '' : `: ${reason}`}\n`)
   const reply = await editorQuestion(signal === undefined ? {} : { signal })
   if (reply === undefined) return 'cancelled'
   return /^(y|yes)$/iu.test(reply.trim()) ? 'allowed-once' : 'rejected'
@@ -434,33 +498,33 @@ async function run(ctx: Context, config: Config): Promise<void> {
         onCancel: () => {
           if (agent.status !== 'running') return
           agent.cancel({ kind: 'user' })
-          internals.output.write('\n[cancelling task]\n\n')
+          internals.output.write(`\n${statusTag('cancelling task', 'warning')}\n\n`)
         },
       }) ?? '/exit'
       const text = prompt.trim()
       if (text === '') continue
       if (text === '/exit' || text === '/quit') break
       if (text === '/help') {
-        internals.output.write('\nEnter sends; Shift+Enter or Ctrl+J adds a line; Ctrl+V pastes multi-line text; /paste reads the Windows clipboard; /verbose toggles full tool output; /tool N shows one retained tool detail; /cancel or Ctrl+C stops the active task; /exit closes the session.\n\n')
+        internals.output.write('\nEnter sends; Shift+Enter or Ctrl+J adds a line; Ctrl+V pastes multi-line text; /paste reads the Windows clipboard; /verbose toggles tool output; /tool N shows retained tool detail; /cancel or Ctrl+C stops the active task; /exit closes the session.\n\n')
         continue
       }
       if (text === '/verbose') {
         const enabled = writeToolEvent.toggleVerbose()
-        internals.output.write(`\n[verbose tool output ${enabled ? 'enabled' : 'disabled'}]\n\n`)
+        internals.output.write(`\n${statusTag('verbose', 'azure')} tool output ${enabled ? paint('enabled', 'kelp') : paint('disabled', 'muted')}\n\n`)
         continue
       }
       const toolDetailMatch = /^\/tool\s+(\d+)$/u.exec(text)
       if (toolDetailMatch !== null) {
         const detail = writeToolEvent.detail(Number(toolDetailMatch[1]))
-        internals.output.write(detail === undefined ? '\n[tool detail not found]\n\n' : `\n${detail}\n\n`)
+        internals.output.write(detail === undefined ? `\n${statusTag('tool detail not found', 'warning')}\n\n` : `\n${detail}\n\n`)
         continue
       }
       if (text === '/cancel') {
         if (agent.status === 'running') {
           agent.cancel({ kind: 'user' })
-          internals.output.write('\n[cancelling task]\n\n')
+          internals.output.write(`\n${statusTag('cancelling task', 'warning')}\n\n`)
         } else {
-          internals.output.write('\n[nothing is running]\n\n')
+          internals.output.write(`\n${statusTag('nothing is running', 'muted')}\n\n`)
         }
         continue
       }
@@ -471,7 +535,7 @@ async function run(ctx: Context, config: Config): Promise<void> {
         internals.output.write(text === '/paste' ? '\nClipboard is empty.\n\n' : '\nMessage is empty.\n\n')
         continue
       }
-      if (text === '/paste') internals.output.write(`\n[pasted ${String(message.length)} characters]\n\n`)
+      if (text === '/paste') internals.output.write(`\n${statusTag('pasted', 'kelp')} ${String(message.length)} characters\n\n`)
       agent.followup(createUserMessage({ content: [{ type: 'text', text: message }], source: { kind: 'user' } }))
       await agent.whenIdle()
     }

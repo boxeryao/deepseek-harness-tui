@@ -11,7 +11,8 @@ A lightweight and fast terminal UI plugin for [DeepSeek Harness (DSH)](https://g
 ## Why this plugin
 
 - **Lightweight** — one focused terminal presentation layer with no Web application runtime.
-- **Fast workflow** — responsive multi-line input, direct keyboard controls, and compact tool summaries.
+- **Fast workflow** — responsive multi-line input, direct keyboard controls, and tool activity that stays out of the conversation by default.
+- **Deep-sea visual language** — the startup dashboard, status labels, path references, and thinking state share one restrained ocean palette.
 - **Native DSH integration** — uses DSH's scoped tools, approvals, agent lifecycle, and durable Session log directly.
 
 ## Requirements
@@ -39,11 +40,11 @@ The package consumes published `@deepseek-ai/*` packages at `0.1.0-rc.6`; it has
 - Shift+Enter or Ctrl+J inserts a newline.
 - Ctrl+V accepts bracketed multi-line paste; `/paste` reads the Windows clipboard directly.
 - `/cancel` or Ctrl+C cancels the active task.
-- `/verbose` toggles bounded tool details for subsequent calls.
+- `/verbose` toggles bounded tool output for subsequent calls.
 - `/tool N` prints the retained input and result for call number `N`.
 - `/help` lists commands; `/exit` or `/quit` closes the session.
 
-Tool calls show numbered summaries by default and failed calls expand automatically. `toolDetailMaxLines` and `toolDetailMaxCharacters` default to 80 lines and 8,000 characters. `toolDetailHistoryLimit` keeps the latest 200 calls available to `/tool N`; older details leave process memory while complete values remain in the DSH Session log.
+Tool calls are quiet by default; failed calls print only one compact line. `/verbose` shows numbered summaries and bounded details for subsequent calls, and `/tool N` can inspect recently retained inputs and results. `toolDetailMaxLines` and `toolDetailMaxCharacters` default to 80 lines and 8,000 characters. `toolDetailHistoryLimit` keeps the latest 200 calls available to `/tool N`; older details leave process memory while complete values remain in the DSH Session log.
 
 ## Scope
 

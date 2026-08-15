@@ -1,0 +1,29 @@
+Windows Registry Editor Version 5.00
+
+; Adds "Open DSH TUI full access" to the current user's right-click menus.
+; Opens the selected directory, then runs:
+;   DSH_PERMISSION_MODE=danger-full-access dsh --profile tui
+
+[HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\dsh-tui-full-access]
+@="Open DSH TUI full access"
+"Icon"="cmd.exe"
+"Position"="Top"
+
+[HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\dsh-tui-full-access\command]
+@="cmd.exe /s /k pushd \"%V\" && set DSH_PERMISSION_MODE=danger-full-access&& dsh --profile tui"
+
+[HKEY_CURRENT_USER\Software\Classes\Directory\shell\dsh-tui-full-access]
+@="Open DSH TUI full access"
+"Icon"="cmd.exe"
+"Position"="Top"
+
+[HKEY_CURRENT_USER\Software\Classes\Directory\shell\dsh-tui-full-access\command]
+@="cmd.exe /s /k pushd \"%1\" && set DSH_PERMISSION_MODE=danger-full-access&& dsh --profile tui"
+
+[HKEY_CURRENT_USER\Software\Classes\Drive\shell\dsh-tui-full-access]
+@="Open DSH TUI full access"
+"Icon"="cmd.exe"
+"Position"="Top"
+
+[HKEY_CURRENT_USER\Software\Classes\Drive\shell\dsh-tui-full-access\command]
+@="cmd.exe /s /k pushd \"%1\" && set DSH_PERMISSION_MODE=danger-full-access&& dsh --profile tui"

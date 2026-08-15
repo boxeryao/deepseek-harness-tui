@@ -1,0 +1,29 @@
+Windows Registry Editor Version 5.00
+
+; Adds "Open DSH TUI here" to the current user's right-click menus.
+; Opens the selected directory, then runs the global DSH launcher:
+;   dsh --profile tui
+
+[HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\dsh-tui]
+@="Open DSH TUI here"
+"Icon"="cmd.exe"
+"Position"="Top"
+
+[HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\dsh-tui\command]
+@="cmd.exe /s /k pushd \"%V\" && dsh --profile tui"
+
+[HKEY_CURRENT_USER\Software\Classes\Directory\shell\dsh-tui]
+@="Open DSH TUI here"
+"Icon"="cmd.exe"
+"Position"="Top"
+
+[HKEY_CURRENT_USER\Software\Classes\Directory\shell\dsh-tui\command]
+@="cmd.exe /s /k pushd \"%1\" && dsh --profile tui"
+
+[HKEY_CURRENT_USER\Software\Classes\Drive\shell\dsh-tui]
+@="Open DSH TUI here"
+"Icon"="cmd.exe"
+"Position"="Top"
+
+[HKEY_CURRENT_USER\Software\Classes\Drive\shell\dsh-tui\command]
+@="cmd.exe /s /k pushd \"%1\" && dsh --profile tui"
