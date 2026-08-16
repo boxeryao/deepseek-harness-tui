@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.1 — 2026-08-16
 
 - Kept the full session transcript inside the TUI render tree so terminal resize redraws no longer leave only the input editor visible.
 - Added a live, phase-aware activity indicator with elapsed time, terminal progress integration, and `Ctrl+C` cancellation while an agent turn is running.
