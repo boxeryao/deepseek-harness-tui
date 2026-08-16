@@ -73,6 +73,33 @@ dsh --profile tui
 
 > 注意：npm 上的 `deepseek-harness-tui` 属于另一个项目。本项目的正确包名是 `dsh-mini-tui`。
 
+## Windows 资源管理器右键启动
+
+DSH Mini TUI 内置当前用户级别的右键菜单安装器。安装后，可以在目录空白处、目录本身或磁盘驱动器上直接启动：
+
+- **Open DSH TUI here** — 使用标准权限模式打开当前目录。
+- **Open DSH TUI full access** — 以 `danger-full-access` 模式打开当前目录；只有主动选择该菜单时才会启用。
+
+从 npm 安装到默认 `tui` profile 后执行：
+
+```powershell
+& "$HOME\.dsh\profiles\tui\node_modules\dsh-mini-tui\scripts\install-dsh-tui-context-menu.cmd"
+```
+
+从源码目录开发时执行：
+
+```powershell
+.\scripts\install-dsh-tui-context-menu.cmd
+```
+
+卸载右键菜单：
+
+```powershell
+.\scripts\uninstall-dsh-tui-context-menu.cmd
+```
+
+安装和卸载只修改 `HKEY_CURRENT_USER`，不需要管理员权限。右键命令最终运行 `dsh --profile tui`，因此模型、Agent 和工具仍由 DSH 提供。
+
 ## 环境要求
 
 - Node.js 22.19 或更高版本，或者 Node.js 24+

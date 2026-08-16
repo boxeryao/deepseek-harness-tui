@@ -6,6 +6,7 @@
 - Added a live, phase-aware activity indicator with elapsed time, terminal progress integration, and `Ctrl+C` cancellation while an agent turn is running.
 - Added a moving highlight to the startup logo and an active `MESSAGE` marker with a gently pulsing input border.
 - Set the terminal window title to the active workspace directory name.
+- Bundled current-user Windows Explorer context-menu installers in the npm package, including standard and explicitly selected full-access entries.
 
 ## 0.2.0 — 2026-08-15
 

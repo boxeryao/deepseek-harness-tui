@@ -73,6 +73,33 @@ dsh --profile tui
 
 > Note: the `deepseek-harness-tui` package on npm belongs to a different project. The correct package name for this project is `dsh-mini-tui`.
 
+## Launch from Windows Explorer
+
+DSH Mini TUI includes a current-user context-menu installer. After installation, launch it from a directory background, a directory itself, or a drive:
+
+- **Open DSH TUI here** — opens the selected directory with the standard permission mode.
+- **Open DSH TUI full access** — opens it with `danger-full-access`; this mode is enabled only when that explicit menu item is selected.
+
+After installing the npm package into the default `tui` profile, run:
+
+```powershell
+& "$HOME\.dsh\profiles\tui\node_modules\dsh-mini-tui\scripts\install-dsh-tui-context-menu.cmd"
+```
+
+When developing from this checkout, run:
+
+```powershell
+.\scripts\install-dsh-tui-context-menu.cmd
+```
+
+To remove both entries:
+
+```powershell
+.\scripts\uninstall-dsh-tui-context-menu.cmd
+```
+
+Installation and removal modify only `HKEY_CURRENT_USER` and do not require administrator rights. The menu ultimately runs `dsh --profile tui`, so DSH still provides the model, agent, and tool runtime.
+
 ## Requirements
 
 - Node.js 22.19 or later, or Node.js 24+

@@ -24,6 +24,11 @@
   "files": [
     "lib/",
     "assets/",
+    "scripts/install-dsh-tui-context-menu.cmd",
+    "scripts/install-dsh-tui-context-menu.reg",
+    "scripts/install-dsh-tui-full-access-context-menu.reg",
+    "scripts/uninstall-dsh-tui-context-menu.cmd",
+    "scripts/uninstall-dsh-tui-context-menu.reg",
     "cordis.patch.yml",
     "README.md",
     "README.en.md",
