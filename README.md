@@ -14,6 +14,8 @@
 
 **DSH Mini TUI 是 DeepSeek Harness 的终端表现层插件，不是独立的 Agent 框架。** 它决定用户在终端里如何输入、查看状态和阅读回答；模型与 Agent 如何运行，仍由 DSH 负责。
 
+DSH Mini TUI 与 [dsh-TUI](https://github.com/ccch1mneyyy/dsh-TUI) 同属 DeepSeek Harness 的社区终端界面生态，二者是独立的插件实现。
+
 ```text
 dsh --profile tui
        │

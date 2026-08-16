@@ -14,6 +14,8 @@ The interface, npm package, and GitHub repository share the name **DSH Mini TUI*
 
 **DSH Mini TUI is the terminal presentation plugin for DeepSeek Harness, not a standalone agent framework.** It controls how users enter messages, follow activity, and read answers in the terminal. DSH still owns how models and agents run.
 
+DSH Mini TUI and [dsh-TUI](https://github.com/ccch1mneyyy/dsh-TUI) are independent plugin implementations in the community terminal-interface ecosystem for DeepSeek Harness.
+
 ```text
 dsh --profile tui
        │
