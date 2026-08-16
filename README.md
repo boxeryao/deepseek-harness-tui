@@ -10,6 +10,37 @@
 
 ![新版 DeepSeek Harness TUI 启动界面](assets/tui-startup-dashboard.png)
 
+## DSH 与 Mini TUI 的关系
+
+**DSH Mini TUI 是 DeepSeek Harness 的终端表现层插件，不是独立的 Agent 框架。** 它决定用户在终端里如何输入、查看状态和阅读回答；模型与 Agent 如何运行，仍由 DSH 负责。
+
+```text
+dsh --profile tui
+       │
+       ▼
+DeepSeek Harness（运行时与插件系统）
+       │
+       ├── 模型路由与凭据
+       ├── standard Agent preset
+       ├── 工具执行与权限审批
+       ├── Session、日志与持久化
+       └── dsh-mini-tui（终端表现层）
+              ├── 输入框与流式回答
+              ├── answer-first 工具输出
+              ├── 活动状态与失败提示
+              └── 窗口重绘、标题和终端交互
+```
+
+| DeepSeek Harness 负责 | DSH Mini TUI 负责 |
+| --- | --- |
+| 模型选择、路由与调用 | 启动界面、输入框与回答渲染 |
+| Agent 生命周期与 `standard` preset | answer-first 对话布局与活动状态 |
+| scoped 工具、审批与取消 | `/verbose`、`/tool N` 等终端命令 |
+| Session 日志和完整执行记录 | resize 重绘、窗口标题与 Windows 终端体验 |
+| DSH 插件生态与能力组合 | 将这些能力以克制的 TUI 形式呈现 |
+
+因此，安装或移除 Mini TUI 改变的是 **DSH 的交互界面**，不会把 DSH 替换成另一套 Agent，也不会削减 DSH 的模型、工具或 Session 能力。
+
 ## Mini 的含义：少显示，专注回答
 
 这版界面的设计原则很简单：**工具照常工作，过程不必占满屏幕。** 对终端用户来说，更少的状态信息意味着更清晰的上下文、更少的滚屏，也更容易连续阅读真正重要的回答。

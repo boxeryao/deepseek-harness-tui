@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Kept the full session transcript inside the TUI render tree so terminal resize redraws no longer leave only the input editor visible.
+- Added a live, phase-aware activity indicator with elapsed time, terminal progress integration, and `Ctrl+C` cancellation while an agent turn is running.
+- Added a moving highlight to the startup logo and an active `MESSAGE` marker with a gently pulsing input border.
+- Set the terminal window title to the active workspace directory name.
+
 ## 0.2.0 — 2026-08-15
 
 - Published the plugin under the unique npm package name `dsh-mini-tui` and documented one-line installation for the DSH `tui` profile.

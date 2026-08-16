@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import type { SessionEvent } from '@deepseek-ai/dsh-session'
-import { createAssistantRenderer, createToolRenderer, internals, welcomeScreen } from '../src/index.ts'
+import { createAssistantRenderer, createToolRenderer, internals, TerminalSessionView, welcomeScreen, workspaceTitle } from '../src/index.ts'
 import { CallId, createToolResultMessage, MessageId } from '@deepseek-ai/dsh-llm'
-import { getKeybindings } from '@earendil-works/pi-tui'
+import { getKeybindings, type Terminal } from '@earendil-works/pi-tui'
 
 const originalOutput = internals.output
 
@@ -39,6 +39,41 @@ function completed(text: string): SessionEvent<'assistant/message'> {
     },
     surfaceOp: 'append',
   }
+}
+
+class TestTerminal implements Terminal {
+  columns = 100
+  rows = 30
+  kittyProtocolActive = false
+  output = ''
+  title = ''
+  progress = false
+  private onInput?: (data: string) => void
+  private onResize?: () => void
+
+  start(onInput: (data: string) => void, onResize: () => void): void {
+    this.onInput = onInput
+    this.onResize = onResize
+  }
+  stop(): void {}
+  async drainInput(): Promise<void> {}
+  write(data: string): void { this.output += data }
+  moveBy(): void {}
+  hideCursor(): void {}
+  showCursor(): void {}
+  clearLine(): void {}
+  clearFromCursor(): void {}
+  clearScreen(): void {}
+  setTitle(title: string): void { this.title = title }
+  setProgress(active: boolean): void { this.progress = active }
+
+  resize(columns: number, rows: number): void {
+    this.columns = columns
+    this.rows = rows
+    this.onResize?.()
+  }
+
+  input(data: string): void { this.onInput?.(data) }
 }
 
 describe('assistant renderer', () => {
@@ -204,6 +239,66 @@ describe('welcome screen', () => {
       if (originalPermission === undefined) delete process.env.DSH_PERMISSION_MODE
       else process.env.DSH_PERMISSION_MODE = originalPermission
     }
+  })
+})
+
+describe('terminal session view', () => {
+  it('keeps transcript content in the resize redraw', async () => {
+    const terminal = new TestTerminal()
+    const view = new TerminalSessionView(terminal, false)
+    view.append('history before resize\n')
+    view.start('project')
+    await new Promise(resolve => setTimeout(resolve, 25))
+
+    terminal.output = ''
+    terminal.resize(48, 20)
+    await new Promise(resolve => setTimeout(resolve, 25))
+
+    expect(terminal.output).toContain('\u001B[2J')
+    expect(terminal.output).toContain('history before resize')
+    view.stop()
+  })
+
+  it('uses the workspace directory name as a safe title', () => {
+    expect(workspaceTitle('E:\\work\\dsh-mini-tui')).toBe('dsh-mini-tui')
+    expect(workspaceTitle('E:\\work\\project\u0007')).toBe('project')
+  })
+
+  it('keeps Ctrl+C cancellation active while no prompt is focused', () => {
+    const terminal = new TestTerminal()
+    const view = new TerminalSessionView(terminal, false)
+    let cancelled = false
+    view.setCancelHandler(() => { cancelled = true })
+    view.start('project')
+
+    terminal.input('\u0003')
+
+    expect(cancelled).toBe(true)
+    view.stop()
+  })
+
+  it('marks the active message input location', async () => {
+    const terminal = new TestTerminal()
+    const view = new TerminalSessionView(terminal, false)
+    view.start('project')
+    const question = view.question()
+    await new Promise(resolve => setTimeout(resolve, 25))
+
+    expect(terminal.output).toContain('▼ MESSAGE')
+    view.stop()
+    await expect(question).resolves.toBeUndefined()
+  })
+
+  it('animates a separately rendered startup header', async () => {
+    const terminal = new TestTerminal()
+    const view = new TerminalSessionView(terminal, true)
+    view.setHeader('static logo\n')
+    view.start('project')
+    view.startLogoAnimation(shimmer => `animated logo ${String(shimmer)}\n`)
+    await new Promise(resolve => setTimeout(resolve, 100))
+
+    expect(terminal.output).toContain('animated logo')
+    view.stop()
   })
 })
 

@@ -10,6 +10,37 @@ The interface, npm package, and GitHub repository share the name **DSH Mini TUI*
 
 ![New DeepSeek Harness TUI startup screen](assets/tui-startup-dashboard.png)
 
+## How DSH and Mini TUI fit together
+
+**DSH Mini TUI is the terminal presentation plugin for DeepSeek Harness, not a standalone agent framework.** It controls how users enter messages, follow activity, and read answers in the terminal. DSH still owns how models and agents run.
+
+```text
+dsh --profile tui
+       │
+       ▼
+DeepSeek Harness (runtime and plugin system)
+       │
+       ├── model routing and credentials
+       ├── standard Agent preset
+       ├── tool execution and approvals
+       ├── Sessions, logs, and persistence
+       └── dsh-mini-tui (terminal presentation)
+              ├── input and streamed answers
+              ├── answer-first tool output
+              ├── activity and failure states
+              └── redraws, titles, and terminal interaction
+```
+
+| DeepSeek Harness owns | DSH Mini TUI owns |
+| --- | --- |
+| Model selection, routing, and calls | Startup screen, input, and answer rendering |
+| Agent lifecycle and the `standard` preset | Answer-first conversation layout and activity states |
+| Scoped tools, approvals, and cancellation | Terminal commands such as `/verbose` and `/tool N` |
+| Session logs and the complete execution record | Resize redraws, window titles, and the Windows terminal experience |
+| The DSH plugin ecosystem and capability composition | A restrained TUI surface for those capabilities |
+
+Installing or removing Mini TUI therefore changes **the interface to DSH**. It does not replace DSH with another agent or reduce DSH's model, tool, or Session capabilities.
+
 ## What Mini means: less process, more answer
 
 The design principle is simple: **tools should keep working without taking over the screen.** Less routine status output means clearer context, less scrolling, and a conversation that is easier to read from beginning to end.
